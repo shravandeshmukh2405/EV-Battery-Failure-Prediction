@@ -1,0 +1,1170 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>BatteryAI | EV Battery Prediction</title>
+
+    <!-- Google Font -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Font Awesome -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- CSS -->
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='style.css') }}"
+    >
+</head>
+
+
+<body>
+
+<div class="app-container">
+
+    <!-- ================================================= -->
+    <!-- SIDEBAR -->
+    <!-- ================================================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+
+            <div>
+                <h2>BatteryAI</h2>
+                <span>Prediction System</span>
+            </div>
+
+        </div>
+
+
+        <nav class="sidebar-nav">
+
+            <a href="#prediction" class="nav-item active">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Prediction</span>
+            </a>
+
+            <a href="#vehicle" class="nav-item">
+                <i class="fa-solid fa-car"></i>
+                <span>Vehicle Data</span>
+            </a>
+
+            <a href="#battery" class="nav-item">
+                <i class="fa-solid fa-battery-three-quarters"></i>
+                <span>Battery Data</span>
+            </a>
+
+            <a href="#thermal" class="nav-item">
+                <i class="fa-solid fa-temperature-half"></i>
+                <span>Thermal Data</span>
+            </a>
+
+        </nav>
+
+
+        <div class="sidebar-bottom">
+
+            <div class="model-status">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>Model Online</strong>
+                    <small>XGBoost Engine</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- ================================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ================================================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    MACHINE LEARNING SYSTEM
+                </p>
+
+                <h1>
+                    EV Battery Failure Prediction
+                </h1>
+
+            </div>
+
+
+            <div class="topbar-badge">
+
+                <i class="fa-solid fa-shield-halved"></i>
+
+                Predictive Diagnostics
+
+            </div>
+
+        </header>
+
+
+        <!-- ================================================= -->
+        <!-- HERO -->
+        <!-- ================================================= -->
+
+        <section class="hero" id="prediction">
+
+            <div class="hero-content">
+
+                <span class="hero-label">
+                    AI-POWERED BATTERY ANALYSIS
+                </span>
+
+                <h2>
+                    Predict battery failure
+                    <span>before it happens.</span>
+                </h2>
+
+                <p>
+                    Enter vehicle and battery parameters to
+                    estimate the probability of battery failure
+                    using our trained XGBoost machine learning model.
+                </p>
+
+            </div>
+
+
+            <div class="hero-icon">
+                <i class="fa-solid fa-car-battery"></i>
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- FORM -->
+        <!-- ================================================= -->
+
+        <form id="predictionForm">
+
+
+            <!-- ================================================= -->
+            <!-- VEHICLE INFORMATION -->
+            <!-- ================================================= -->
+
+            <section class="form-section" id="vehicle">
+
+                <div class="section-header">
+
+                    <div class="section-icon vehicle-icon">
+                        <i class="fa-solid fa-car"></i>
+                    </div>
+
+                    <div>
+                        <h3>Vehicle Information</h3>
+                        <p>Basic vehicle usage and lifecycle data</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+
+                        <label for="manufacturing_year">
+                            Manufacturing Year
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-regular fa-calendar"></i>
+
+                            <input
+                                type="number"
+                                id="manufacturing_year"
+                                name="manufacturing_year"
+                                placeholder="e.g. 2022"
+                                min="2000"
+                                max="2030"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="odometer_km">
+                            Odometer (km)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-road"></i>
+
+                            <input
+                                type="number"
+                                id="odometer_km"
+                                name="odometer_km"
+                                placeholder="e.g. 45000"
+                                min="0"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="vehicle_age_years">
+                            Vehicle Age (years)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            <input
+                                type="number"
+                                id="vehicle_age_years"
+                                name="vehicle_age_years"
+                                placeholder="e.g. 3"
+                                min="0"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="cycle_count">
+                            Battery Cycle Count
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-rotate"></i>
+
+                            <input
+                                type="number"
+                                id="cycle_count"
+                                name="cycle_count"
+                                placeholder="e.g. 650"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- BATTERY HEALTH -->
+            <!-- ================================================= -->
+
+            <section class="form-section" id="battery">
+
+                <div class="section-header">
+
+                    <div class="section-icon battery-icon">
+                        <i class="fa-solid fa-battery-three-quarters"></i>
+                    </div>
+
+                    <div>
+                        <h3>Battery Health</h3>
+                        <p>Battery condition and degradation parameters</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+
+                        <label for="battery_health_percent">
+                            Battery Health (%)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-heart-pulse"></i>
+
+                            <input
+                                type="number"
+                                id="battery_health_percent"
+                                name="battery_health_percent"
+                                placeholder="e.g. 88"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="state_of_health">
+                            State of Health (%)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-chart-simple"></i>
+
+                            <input
+                                type="number"
+                                id="state_of_health"
+                                name="state_of_health"
+                                placeholder="e.g. 87"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="capacity_loss_percent">
+                            Capacity Loss (%)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-arrow-trend-down"></i>
+
+                            <input
+                                type="number"
+                                id="capacity_loss_percent"
+                                name="capacity_loss_percent"
+                                placeholder="e.g. 12"
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="remaining_capacity">
+                            Remaining Capacity (kWh)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-battery-half"></i>
+
+                            <input
+                                type="number"
+                                id="remaining_capacity"
+                                name="remaining_capacity"
+                                placeholder="e.g. 72"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="battery_capacity_kwh">
+                            Battery Capacity (kWh)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-battery-full"></i>
+
+                            <input
+                                type="number"
+                                id="battery_capacity_kwh"
+                                name="battery_capacity_kwh"
+                                placeholder="e.g. 82"
+                                min="0"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="predicted_remaining_life_cycles">
+                            Remaining Life Cycles
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-arrows-rotate"></i>
+
+                            <input
+                                type="number"
+                                id="predicted_remaining_life_cycles"
+                                name="predicted_remaining_life_cycles"
+                                placeholder="e.g. 900"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="aging_score">
+                            Aging Score
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-hourglass-half"></i>
+
+                            <input
+                                type="number"
+                                id="aging_score"
+                                name="aging_score"
+                                placeholder="e.g. 25"
+                                min="0"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="previous_faults">
+                            Previous Faults
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            <input
+                                type="number"
+                                id="previous_faults"
+                                name="previous_faults"
+                                placeholder="e.g. 1"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- THERMAL & ENVIRONMENT -->
+            <!-- ================================================= -->
+
+            <section class="form-section" id="thermal">
+
+                <div class="section-header">
+
+                    <div class="section-icon thermal-icon">
+                        <i class="fa-solid fa-temperature-half"></i>
+                    </div>
+
+                    <div>
+                        <h3>Thermal & Environment</h3>
+                        <p>Temperature, resistance and cooling parameters</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+
+                        <label for="cell_temperature_max">
+                            Maximum Cell Temperature (°C)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-temperature-high"></i>
+
+                            <input
+                                type="number"
+                                id="cell_temperature_max"
+                                name="cell_temperature_max"
+                                placeholder="e.g. 42"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="cell_temperature_avg">
+                            Average Cell Temperature (°C)
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-temperature-half"></i>
+
+                            <input
+                                type="number"
+                                id="cell_temperature_avg"
+                                name="cell_temperature_avg"
+                                placeholder="e.g. 30"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="internal_resistance">
+                            Internal Resistance
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-bolt"></i>
+
+                            <input
+                                type="number"
+                                id="internal_resistance"
+                                name="internal_resistance"
+                                placeholder="e.g. 0.045"
+                                step="0.001"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="thermal_runaway_risk">
+                            Thermal Runaway Risk
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-fire"></i>
+
+                            <input
+                                type="number"
+                                id="thermal_runaway_risk"
+                                name="thermal_runaway_risk"
+                                placeholder="e.g. 15"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="thermal_health_score">
+                            Thermal Health Score
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-temperature-low"></i>
+
+                            <input
+                                type="number"
+                                id="thermal_health_score"
+                                name="thermal_health_score"
+                                placeholder="e.g. 85"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="temperature_variance">
+                            Temperature Variance
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-chart-area"></i>
+
+                            <input
+                                type="number"
+                                id="temperature_variance"
+                                name="temperature_variance"
+                                placeholder="e.g. 3.5"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="dust_exposure">
+                            Dust Exposure
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-wind"></i>
+
+                            <input
+                                type="number"
+                                id="dust_exposure"
+                                name="dust_exposure"
+                                placeholder="e.g. 20"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="cooling_system_health">
+                            Cooling System Health
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-fan"></i>
+
+                            <input
+                                type="number"
+                                id="cooling_system_health"
+                                name="cooling_system_health"
+                                placeholder="e.g. 90"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ELECTRICAL PARAMETERS -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-header">
+
+                    <div class="section-icon electrical-icon">
+                        <i class="fa-solid fa-plug"></i>
+                    </div>
+
+                    <div>
+                        <h3>Electrical Parameters</h3>
+                        <p>Charging, voltage and BMS information</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+
+                        <label for="charge_efficiency">
+                            Charge Efficiency
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-bolt"></i>
+
+                            <input
+                                type="number"
+                                id="charge_efficiency"
+                                name="charge_efficiency"
+                                placeholder="e.g. 94"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="discharge_efficiency">
+                            Discharge Efficiency
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-battery-quarter"></i>
+
+                            <input
+                                type="number"
+                                id="discharge_efficiency"
+                                name="discharge_efficiency"
+                                placeholder="e.g. 93"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="voltage_imbalance">
+                            Voltage Imbalance
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-wave-square"></i>
+
+                            <input
+                                type="number"
+                                id="voltage_imbalance"
+                                name="voltage_imbalance"
+                                placeholder="e.g. 0.08"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="BMS_warning_count">
+                            BMS Warning Count
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-bell"></i>
+
+                            <input
+                                type="number"
+                                id="BMS_warning_count"
+                                name="BMS_warning_count"
+                                placeholder="e.g. 2"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="abnormal_voltage_events">
+                            Abnormal Voltage Events
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+
+                            <input
+                                type="number"
+                                id="abnormal_voltage_events"
+                                name="abnormal_voltage_events"
+                                placeholder="e.g. 1"
+                                min="0"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="maintenance_score">
+                            Maintenance Score
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-screwdriver-wrench"></i>
+
+                            <input
+                                type="number"
+                                id="maintenance_score"
+                                name="maintenance_score"
+                                placeholder="e.g. 85"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- DRIVING & STRESS -->
+            <!-- ================================================= -->
+
+            <section class="form-section">
+
+                <div class="section-header">
+
+                    <div class="section-icon stress-icon">
+                        <i class="fa-solid fa-gauge-high"></i>
+                    </div>
+
+                    <div>
+                        <h3>Driving & Battery Stress</h3>
+                        <p>Driving behavior and battery stress indicators</p>
+                    </div>
+
+                </div>
+
+
+                <div class="input-grid">
+
+
+                    <div class="input-group">
+
+                        <label for="battery_stress_index">
+                            Battery Stress Index
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-gauge"></i>
+
+                            <input
+                                type="number"
+                                id="battery_stress_index"
+                                name="battery_stress_index"
+                                placeholder="e.g. 30"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="driving_stress_score">
+                            Driving Stress Score
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-car-side"></i>
+
+                            <input
+                                type="number"
+                                id="driving_stress_score"
+                                name="driving_stress_score"
+                                placeholder="e.g. 35"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="aggressive_acceleration_score">
+                            Aggressive Acceleration
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-forward-fast"></i>
+
+                            <input
+                                type="number"
+                                id="aggressive_acceleration_score"
+                                name="aggressive_acceleration_score"
+                                placeholder="e.g. 25"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="input-group">
+
+                        <label for="hard_braking_score">
+                            Hard Braking Score
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <i class="fa-solid fa-car-burst"></i>
+
+                            <input
+                                type="number"
+                                id="hard_braking_score"
+                                name="hard_braking_score"
+                                placeholder="e.g. 20"
+                                step="0.1"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ================================================= -->
+            <!-- ACTION -->
+            <!-- ================================================= -->
+
+            <div class="action-area">
+
+                <button
+                    type="submit"
+                    class="predict-button"
+                >
+
+                    <span>
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        Analyze Battery
+                    </span>
+
+                    <i class="fa-solid fa-arrow-right"></i>
+
+                </button>
+
+
+                <p>
+                    <i class="fa-solid fa-lock"></i>
+                    Your input is processed locally by the prediction API.
+                </p>
+
+            </div>
+
+        </form>
+
+
+        <!-- ================================================= -->
+        <!-- LOADING -->
+        <!-- ================================================= -->
+
+        <section
+            id="loading"
+            class="loading-panel hidden"
+        >
+
+            <div class="loader"></div>
+
+            <div>
+
+                <h3>Analyzing Battery...</h3>
+
+                <p>
+                    The XGBoost model is evaluating the battery parameters.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- RESULT -->
+        <!-- ================================================= -->
+
+        <section
+            id="result"
+            class="result-panel hidden"
+        >
+
+            <div class="result-icon">
+
+                <i class="fa-solid fa-check"></i>
+
+            </div>
+
+
+            <div class="result-content">
+
+                <span class="result-label">
+                    PREDICTION RESULT
+                </span>
+
+                <h2 id="resultText">
+                    Battery is Healthy
+                </h2>
+
+                <p>
+                    Estimated failure probability
+                </p>
+
+            </div>
+
+
+            <div class="probability-box">
+
+                <strong id="probability">
+                    0.00
+                </strong>
+
+                <span>%</span>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================================================= -->
+        <!-- FOOTER -->
+        <!-- ================================================= -->
+
+        <footer>
+
+            <p>
+                EV Battery Failure Prediction System
+            </p>
+
+            <span>
+                Powered by XGBoost Machine Learning
+            </span>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<!-- JavaScript -->
+
+<script src="{{ url_for('static', path='script.js') }}"></script>
+
+</body>
+
+</html>
+```
