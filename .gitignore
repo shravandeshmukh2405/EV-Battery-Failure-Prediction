@@ -1,26 +1,19 @@
-# Python
 __pycache__/
 *.py[cod]
 *.pyo
 
-# Virtual environment
 .venv/
 venv/
 env/
 
-# Jupyter
 .ipynb_checkpoints/
 
-# Environment variables
 .env
 
-# IDE
 .vscode/
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Temporary files
 *.tmp
 *.log
